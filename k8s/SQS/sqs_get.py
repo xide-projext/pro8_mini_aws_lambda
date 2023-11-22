@@ -16,10 +16,9 @@ def receive_message_from_sqs(sqs, queue_url):
         WaitTimeSeconds=0
     )
 
-    print(response)
-
     # 받은 메시지가 있는지 확인
     if response['Messages']:
+        print(response)
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
 
@@ -31,8 +30,6 @@ def receive_message_from_sqs(sqs, queue_url):
             QueueUrl=queue_url,
             ReceiptHandle=receipt_handle
         )
-    else:
-        print("No messages in the queue.") # 새 메시지가 없으면 출력되는 텍스트
 
 # 큐 URL을 직접 입력하거나, 환경 변수 등을 통해 동적으로 설정할 수 있습니다.
 queue_url = 'https://sqs.ap-northeast-2.amazonaws.com/031717690025/CodeQueue.fifo'
