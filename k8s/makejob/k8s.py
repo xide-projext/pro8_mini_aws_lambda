@@ -42,7 +42,7 @@ if __name__ == "__main__":
   # test용 ARGV 1=식별자 2=파일 경로 
   iden = sys.argv[1]
   path = sys.argv[2]
-  image = "oes52/myjob"
+  image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
   # 상기한 테스트는 이후 삭제 예정
 
   with open( path, "r+" ) as fr :
