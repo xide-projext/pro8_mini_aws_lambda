@@ -13,7 +13,7 @@ def create_kubernetes_job(code, iden, image):
   template = Template(template_content)
   
   encoded_code = base64.b64encode(code.encode()).decode()
-  variables = {'pycode': code, 'iden': iden, 'imagename':image}
+  variables = {'pycode': encoded_code, 'iden': iden, 'imagename':image}
   # 변수를 적용하여 YAML 생성
   rendered_yaml = template.render(variables)
 
@@ -39,6 +39,7 @@ def delete_yaml(iden) :
     os.remove(file_name)
 
 if __name__ == "__main__":
+  # start = time.time()
   # test용 ARGV 1=식별자 2=파일 경로 
   iden = sys.argv[1]
   path = sys.argv[2]
@@ -62,3 +63,7 @@ if __name__ == "__main__":
 
   # Yaml 삭제
   delete_yaml(iden)
+
+  # end = time.time() - start
+
+  # print(f"Time : {end:5f}\n")
