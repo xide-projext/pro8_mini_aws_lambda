@@ -2,7 +2,9 @@ import subprocess
 import sys, os
 import base64
 import time
+import boto3
 import json
+import uuid
 import threading
 from jinja2 import Template
 
@@ -40,18 +42,32 @@ def delete_yaml(iden) :
   if os.path.exists(file_name):
     os.remove(file_name)
 
-def printjson(text) :
-  jo = json.loads(text)
-  print(f"\nIdentify : \n{jo['Identify']}")
-  print(f"\nPrint : \n{jo['Print']}")
-  print(f"\nReturn : \n{jo['Return']}")
-
 def plzcleanup(iden):
   # Kubernetes Job 삭제
   delete_kubernetes_job(iden)
 
   # Yaml 삭제
   delete_yaml(iden)
+
+def send_json_message_to_sqs(json_text):
+  queue_url = os.environ.get('OUT_QUEUE')
+  # AWS SQS 클라이언트 생성
+  sqs = boto3.client('sqs')
+
+  try:
+    # Message Group & Deduplication ID 생성 (임의의 UUID 사용)
+    deduplication_id = str(uuid.uuid4())
+    group_id = str(uuid.uuid4())
+
+    # SQS 큐에 JSON 형식의 메시지 보내기
+    response = sqs.send_message(
+      QueueUrl=queue_url,
+      MessageBody=json_text,
+      MessageDeduplicationId=deduplication_id,
+      MessageGroupId=group_id
+    )
+  except Exception as e:
+    print("Error sending message: {}".format(e))
 
 if __name__ == "__main__":
   # start = time.time()
@@ -77,7 +93,7 @@ if __name__ == "__main__":
   thread = threading.Thread(target=plzcleanup, args=(iden,))
   thread.start()
 
-  printjson(text)
+  send_json_message_to_sqs(text)
 
   # end = time.time() - start
   # print(f"Time : {end:5f}\n")
