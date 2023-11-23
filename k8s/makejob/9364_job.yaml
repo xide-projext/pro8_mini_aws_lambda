@@ -1,0 +1,18 @@
+# my-python-job.yaml.j2
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: '9364'
+spec:
+  template:
+    spec:
+      containers:
+      - name: my-container
+        image: '031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest'
+        env:
+        - name: PYCODE
+          value: 'aW1wb3J0IGpzb24KCmpzb25fc3RyaW5nID0gJycnCnsKICAgIklkZW50aWZ5IjoiaGloaSIsCiAgICJDb2RlIjoiYXNrcXdlazE1MCVAKUAlKSoiLAogICAiVHlwZSI6IlB5dGhvbiIsCiAgICJFbnYiOnsKICAgICAgImFhIjoiYmIiLAogICAgICAiY2MiOiJkZCIKICAgfQp9JycnCmRlZiBtYWluKCkgOgogICAgam8gPSBqc29uLmxvYWRzKGpzb25fc3RyaW5nKQoKICAgIHByaW50KGYiSWRlbnRpZnkgOiB7am9bJ0lkZW50aWZ5J119IikKICAgIHByaW50KGYiQ29kZSA6IHtqb1snQ29kZSddfSIpCiAgICBwcmludChmIlR5cGUgOiB7am9bJ1R5cGUnXX0iKQogICAgcHJpbnQoZiJFbnYgOiB7am9bJ0VudiddfSIpCiAgICBwcmludChmIkVudjEgOiB7am9bJ0VudiddWydhYSddfSIpCiAgICBwcmludChmIkVudjEgOiB7am9bJ0VudiddWydjYyddfSIpCgogICAgcmV0dXJuICLtnpjrk6Tri6QiCg=='
+        - name : IDENTIFY
+          value : '9364'
+      restartPolicy: Never
+  backoffLimit: 1

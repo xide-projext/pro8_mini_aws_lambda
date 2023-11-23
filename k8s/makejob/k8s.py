@@ -69,20 +69,11 @@ def send_json_message_to_sqs(json_text):
   except Exception as e:
     print("Error sending message: {}".format(e))
 
-if __name__ == "__main__":
+def run_k8s(iden, code, image, env=[]):
   # start = time.time()
-  # test용 ARGV 1=식별자 2=파일 경로 
-  iden = sys.argv[1]
-  path = sys.argv[2]
-  image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
-
-  with open( path, "r+" ) as fr :
-    env_code = fr.read()
-
-  # 상기한 테스트는 이후 삭제 예정
 
   # Kubernetes Job 생성
-  create_kubernetes_job(env_code, iden, image)
+  create_kubernetes_job(code, iden, image)
 
   # Job이 완료될 때까지 대기
   subprocess.run(["kubectl", "wait", "--for=condition=complete", f"job/{iden}"])
