@@ -1,4 +1,20 @@
 import boto3, time
+import json
+
+from diff_match_patch import diff_match_patch
+
+test = '''
+{
+   "Identify":"hihi",
+   "Code":"askqwek150%@)@%)*",
+   "Type":"Python",
+   "Env":{
+      "aa":"bb",
+      "cc":"dd"
+   }
+}
+'''
+
 
 def receive_message_from_sqs(sqs, queue_url):
 
@@ -13,18 +29,24 @@ def receive_message_from_sqs(sqs, queue_url):
         ],
         MaxNumberOfMessages=1,
         VisibilityTimeout=5, #타임아웃이 0 이면 삭제를 할 수 없음 주의!
-        WaitTimeSeconds=0
+        WaitTimeSeconds=1
     )
 
     # 받은 메시지가 있는지 확인
+    # print(response)
     if response['Messages']:
-        print(response)
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
 
-        # 메시지 출력 body 이외는 일단 주석처리 필요에 따라 사용
-        print(f"Body: {message['Body']}")
+        m = message['Body'].replace("\n","")
 
+        jo = json.loads(m)
+        # print(f"Identify : {jo['Identify']}")
+        # print(f"Code : {jo['Code']}")
+        # print(f"Type : {jo['Type']}")
+        # print(f"Env : {jo['Env']}")
+        # print(f"Env Num : {len(jo['Env'])}")
+        
         # 메시지 삭제 (optional)
         sqs.delete_message(
             QueueUrl=queue_url,
@@ -40,4 +62,5 @@ sqs = boto3.client('sqs')
 # receive_message 함수 호출
 while True:
     receive_message_from_sqs(sqs, queue_url)
+
     time.sleep(1)

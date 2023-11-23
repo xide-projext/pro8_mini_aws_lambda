@@ -5,7 +5,7 @@ import base64
 import time
 from jinja2 import Template
 
-def create_kubernetes_job(code, iden, image):
+def create_kubernetes_job(code, iden, image, env=[]):
   # 템플릿 로드
   with open('python.j2', 'r') as file:
     template_content = file.read()
@@ -44,10 +44,11 @@ if __name__ == "__main__":
   iden = sys.argv[1]
   path = sys.argv[2]
   image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
-  # 상기한 테스트는 이후 삭제 예정
 
   with open( path, "r+" ) as fr :
     env_code = fr.read()
+
+  # 상기한 테스트는 이후 삭제 예정
 
   # Kubernetes Job 생성
   create_kubernetes_job(env_code, iden, image)
