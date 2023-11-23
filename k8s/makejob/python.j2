@@ -12,5 +12,7 @@ spec:
         env:
         - name: PYCODE
           value: '{{ pycode }}'
+        - name : IDENTIFY
+          value : '{{ iden }}'
       restartPolicy: Never
   backoffLimit: 1
