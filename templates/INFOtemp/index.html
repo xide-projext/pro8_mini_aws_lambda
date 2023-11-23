@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  
+  <script src="{% static 'lib/min/vs/loader.js' %}"></script>
+  <script>
+    require.config({
+      paths: {
+        //'vs': 'lib/min/vs'
+        'vs' : "{% static 'lib/min/vs' %}"
+      }
+    });
+    require(["vs/editor/editor.main"], () => {
+      var editor = monaco.editor.create(document.getElementById('container'), {
+        value: `function x() {\n\tconsole.log("Hello world!");\n}`,
+        language: 'python',
+        theme: 'vs-dark',
+        scrollBeyondLastLine: false,
+        minimap: { enabled: false },
+      });
+      window.logEditorValue = function() {
+          console.log(editor.getValue());
+      };
+    });
+  </script>
+</head>
+<body>
+  <div class="bar" id="TopBar">
+
+  </div>
+  <div class="bar" id="MiddleBar">
+    
+  </div>
+  <div class="case">
+    <div class="grid"  id="resizableGrid">
+      <div class="item merged">
+        <p class="text">
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+          아에이오우<br>
+        </p>
+      </div>
+      <div class="code">
+        <div id="container"></div>
+      </div>
+      <div class="item">
+      </div>
+    </div>
+  </div>
+
+  <div class="bar under">
+    <button onclick="logEditorValue()" id="submit">
+      제출하기
+    </button>
+  </div>
+</body>
