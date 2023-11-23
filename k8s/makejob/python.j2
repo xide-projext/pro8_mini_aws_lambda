@@ -6,12 +6,13 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: sqs-role
       containers:
       - name: my-container
         image: '{{ imagename }}'
         env:
         - name: PYCODE
           value: '{{ pycode }}'
+        - name : IDENTIFY
+          value : '{{ iden }}'
       restartPolicy: Never
   backoffLimit: 1

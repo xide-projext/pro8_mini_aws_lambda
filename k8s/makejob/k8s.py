@@ -1,8 +1,9 @@
 import subprocess
-import sys
-import os
+import sys, os
 import base64
 import time
+import json
+import threading
 from jinja2 import Template
 
 def create_kubernetes_job(code, iden, image, env=[]):
@@ -27,7 +28,8 @@ def create_kubernetes_job(code, iden, image, env=[]):
 def get_job_logs(iden):
   # Job 로그 가져오기
   job_logs = subprocess.check_output(["kubectl", "logs", f"job/{iden}"], text=True)
-  print(f"{iden}Job Logs: \n{job_logs}")
+  #print(f"{iden}Job Logs: \n{job_logs}")
+  return job_logs
 
 def delete_kubernetes_job(iden):
   # Kubernetes Job 삭제
@@ -37,6 +39,19 @@ def delete_yaml(iden) :
   file_name = f"./{iden}_job.yaml"
   if os.path.exists(file_name):
     os.remove(file_name)
+
+def printjson(text) :
+  jo = json.loads(text)
+  print(f"\nIdentify : \n{jo['Identify']}")
+  print(f"\nPrint : \n{jo['Print']}")
+  print(f"\nReturn : \n{jo['Return']}")
+
+def plzcleanup(iden):
+  # Kubernetes Job 삭제
+  delete_kubernetes_job(iden)
+
+  # Yaml 삭제
+  delete_yaml(iden)
 
 if __name__ == "__main__":
   # start = time.time()
@@ -57,14 +72,12 @@ if __name__ == "__main__":
   subprocess.run(["kubectl", "wait", "--for=condition=complete", f"job/{iden}"])
 
   # Job 로그 출력
-  get_job_logs(iden)
+  text = get_job_logs(iden)
 
-  # Kubernetes Job 삭제
-  delete_kubernetes_job(iden)
+  thread = threading.Thread(target=plzcleanup, args=(iden,))
+  thread.start()
 
-  # Yaml 삭제
-  delete_yaml(iden)
+  printjson(text)
 
   # end = time.time() - start
-
   # print(f"Time : {end:5f}\n")
