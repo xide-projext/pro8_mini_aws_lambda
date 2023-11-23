@@ -30,7 +30,6 @@ def create_kubernetes_job(code, iden, image, env=[]):
 def get_job_logs(iden):
   # Job 로그 가져오기
   job_logs = subprocess.check_output(["kubectl", "logs", f"job/{iden}"], text=True)
-  #print(f"{iden}Job Logs: \n{job_logs}")
   return job_logs
 
 def delete_kubernetes_job(iden):
@@ -49,7 +48,7 @@ def plzcleanup(iden):
   # Yaml 삭제
   delete_yaml(iden)
 
-def send_json_message_to_sqs(json_text):
+def send_json_message_to_sqs(json_text, iden):
   queue_url = os.environ.get('OUT_QUEUE')
   # AWS SQS 클라이언트 생성
   sqs = boto3.client('sqs')
@@ -63,6 +62,7 @@ def send_json_message_to_sqs(json_text):
     response = sqs.send_message(
       QueueUrl=queue_url,
       MessageBody=json_text,
+      MessageAttributes={'client_id': {'StringValue': str(iden), 'DataType': 'String'}},
       MessageDeduplicationId=deduplication_id,
       MessageGroupId=group_id
     )
@@ -84,7 +84,7 @@ def run_k8s(iden, code, image, env=[]):
   thread = threading.Thread(target=plzcleanup, args=(iden,))
   thread.start()
 
-  send_json_message_to_sqs(text)
+  send_json_message_to_sqs(text, iden)
 
   # end = time.time() - start
   # print(f"Time : {end:5f}\n")

@@ -21,23 +21,19 @@ def receive_message_from_sqs(sqs, queue_url):
     )
 
     # 받은 메시지가 있는지 확인
-    # print(response)
     if response['Messages']:
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
 
-        m = message['Body'].replace("\n","")
+        print(message['Body'])
 
-        jo = json.loads(m)
-        iden = jo['Identify']
-        code = jo['Code']
-        # print(f"Identify : {jo['Identify']}")
-        # print(f"Code : {jo['Code']}")
-        # print(f"Type : {jo['Type']}")
-        # print(f"Env : {jo['Env']}")
-        # print(f"Env Num : {len(jo['Env'])}")
+        # m = message['Body'].replace("\n","")
 
-        #이후 코드의 언어에 따라 Image 변경, 현재는 Python Image
+        # jo = json.loads(m)
+        iden = message['MessageAttributes']['client_id']['StringValue']
+        code = message['Body']
+
+        # #이후 코드의 언어에 따라 Image 변경, 현재는 Python Image
         image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
 
         thread = threading.Thread(target=run_k8s, args=(iden, code, image,))
@@ -48,7 +44,6 @@ def receive_message_from_sqs(sqs, queue_url):
             QueueUrl=queue_url,
             ReceiptHandle=receipt_handle
         )
-
 
 if __name__ == "__main__":
     # AWS SQS 클라이언트 생성
