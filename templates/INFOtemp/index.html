@@ -16,7 +16,7 @@
     });
     require(["vs/editor/editor.main"], () => {
       var editor = monaco.editor.create(document.getElementById('container'), {
-        value: `function x() {\n\tconsole.log("Hello world!");\n}`,
+        value: `def main():\n\tprint('Hello! World!')\n\treturn 'Bye Bye'`,
         language: 'python',
         theme: 'vs-dark',
         scrollBeyondLastLine: false,
