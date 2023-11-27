@@ -10,3 +10,6 @@ def index(request):
 
 def login(request):
     return render(request, 'login/login.html')
+
+def list(request):
+    return render(request, 'list/list.html')

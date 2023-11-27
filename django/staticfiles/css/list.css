@@ -1,0 +1,77 @@
+
+
+body {
+    font-family: Arial, sans-serif; / 전체 텍스트에 대한 폰트 지정 /
+    margin: 20px; / 전체 바깥 여백 설정 /
+  }
+
+  h1 {
+    color: #333; / 제목 색상 설정 /
+    text-align: center; / 제목 가운데 정렬 /
+    display: inline-block; / 텍스트에 맞게 크기 조정 /
+    border: 10px solid #ccc; / 테두리 추가 /
+    padding: 0; / 내부 여백 제거 /
+    margin: 0; / 외부 여백 제거 /
+  }
+
+  h2 {
+    color: #555; / 부제목 색상 설정 /
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  ul {
+    list-style: none; / 목록에서 기본 리스트 스타일 제거 /
+    padding: 0; / 목록 안쪽 여백 제거 /
+    text-align: left; / 목록 내용은 왼쪽 정렬 유지 /
+  }
+
+  li {
+    border: 1px solid #ccc; / 각 문제 아이템에 테두리 추가 /
+    border-radius: 5px; / 테두리의 모서리를 둥글게 설정 /
+    margin-bottom: 15px; / 각 문제 아이템 간의 아래 여백 설정 /
+    padding: 15px; / 각 문제 아이템 내부 여백 설정 /
+    transition: transform 0.2s ease-in-out; / 호버 효과를 위한 변환 효과 추가 /
+  }
+
+  li:hover {
+    transform: scale(1.03); / 호버 시 약간 확대되는 효과 /
+  }
+
+  h3 {
+    margin-top: 0; / 문제 제목 위 여백 제거 /
+    color: #444; / 문제 제목 색상 설정 /
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666; / 문제 설명 텍스트 색상 설정 /
+    margin-bottom: 10px;
+  }
+
+  a {
+    text-decoration: none; / 링크 밑줄 제거 /
+    color: #007bff; / 링크 색상 설정 /
+  }
+
+  a:hover {
+    text-decoration: underline; / 호버 시 밑줄 효과 /
+  }
+
+  .difficulty-container {
+    display: flex;
+    justify-content: space-between;
+    color: #403838; / 글자색 설정 /
+    text-align: left;
+    font-size: 12px; / 글자 크기 설정 /
+    font-weight: bold; / 글자 굵기 설정 /
+    border: 1px solid #ccc; / 테두리 추가 /
+    border-radius: 5px; / 테두리의 모서리를 둥글게 설정 /
+  }
+
+  .difficulty {
+    margin-left: auto;
+    margin-bottom: 10px; / 하단 여백 설정 /
+    padding: 10px; / 내부 여백 설정 */
+}
