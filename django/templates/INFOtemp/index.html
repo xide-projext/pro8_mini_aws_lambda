@@ -30,6 +30,8 @@
     webSocket.onmessage = function(event) {
       const receivedMessage = event.data;
       console.log('서버로부터의 메시지:', receivedMessage);
+      const rt = document.getElementById('return');
+      rt.innerHTML += receivedMessage;
       // 받은 메시지를 콘솔에 출력하거나 필요한 처리를 수행할 수 있습니다.
     };
   </script>
@@ -106,7 +108,7 @@
       <div class="code">
         <div id="container"></div>
       </div>
-      <div class="item">
+      <div class="item text">
       </div>
     </div>
   </div>
