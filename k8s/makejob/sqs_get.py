@@ -21,7 +21,7 @@ def receive_message_from_sqs(sqs, queue_url):
     )
 
     # 받은 메시지가 있는지 확인
-    if response['Messages']:
+    if 'Messages' in response:
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
 
