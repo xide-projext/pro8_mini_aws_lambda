@@ -25,7 +25,7 @@ def receive_message_from_sqs(sqs, queue_url):
         message = response['Messages'][0]
         receipt_handle = message['ReceiptHandle']
 
-        print(message['Body'])
+        #print(message['Body'])
 
         # m = message['Body'].replace("\n","")
 
