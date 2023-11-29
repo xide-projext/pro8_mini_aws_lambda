@@ -5,12 +5,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   
   <script src="{% static 'lib/min/vs/loader.js' %}"></script>
+  <script src="{% static 'js/overlay.js' %}"></script>
   <script>
+    window.onload = setInit;
     const webSocket = new WebSocket("ws://www.choehanbeen.xyz:8000");
 
     require.config({
       paths: {
-        //'vs': 'lib/min/vs'
         'vs' : "{% static 'lib/min/vs' %}"
       }
     });
@@ -23,91 +24,59 @@
         minimap: { enabled: false },
       });
       window.logEditorValue = function() {
-          //console.log(editor.getValue());
-          webSocket.send(editor.getValue());
+        var code = editor.getValue();
+        var args = getValues();
+        var json_data = {
+          CODE : code,
+          ARGS : args
+        };
+        var jsonString = JSON.stringify(json_data, null, 2);
+        webSocket.send(jsonString);
       };
     });
     webSocket.onmessage = function(event) {
       const receivedMessage = event.data;
-      console.log('서버로부터의 메시지:', receivedMessage);
       const rt = document.getElementById('return');
       rt.innerHTML += receivedMessage;
-      // 받은 메시지를 콘솔에 출력하거나 필요한 처리를 수행할 수 있습니다.
     };
   </script>
-  <style>
-    /* 오버레이를 감싸는 스타일 */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 9998;
-    }
-
-    /* 오버레이 내용의 스타일 */
-    .overlay-content {
-      background-color: #fff;
-      padding: 20px;
-      width: 50%;
-      height: 50%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      z-index: 9999;
-    }
-
-    /* 닫기 버튼 스타일 */
-    .close-btn {
-      cursor: pointer;
-      z-index: 10000;
-    }
-  </style>
 </head>
 <body>
-  <div class="bar" id="TopBar">
 
+  <!-- Top Bar -->
+  <div class="bar" id="TopBar">
   </div>
+  <!-- End of Top Bar -->
+
+  <!-- Middle Bar -->
   <div class="bar" id="MiddleBar">
-    
   </div>
+  <!-- End of Middle Bar -->
+
+
+  <!-- Overlay Area -->
   <div id="overlay" class="overlay">
     <div class="overlay-content">
       <div id="table-container">
         <table id="myTable">
           <thead>
-            <tr>
-              <th>텍스트 필드 1</th>
-              <th>텍스트 필드 2</th>
-              <th>텍스트 필드 3</th>
-              <th>삭제</th>
-            </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><input type="text"></td>
-              <td><input type="text"></td>
-              <td><input type="text"></td>
-              <td><button class="delete-btn" onclick="deleteRow(this)">삭제</button></td>
-            </tr>
           </tbody>
         </table>
       </div>
-      
-      <button onclick="addRow()">행 추가</button>
-    
-      <!-- 입력된 내용을 처리하는 버튼 -->
-      <button onclick="getValues()">입력된 내용 처리</button>
-      <button class="close-btn" onclick="closeOverlay()">
-        닫기
-      </button>
+      <p>
+        <button onclick="addRow()">행 추가</button>
+        <button onclick="getValues()">입력된 내용 처리</button>
+        <button class="close-btn" onclick="closeOverlay()">
+          닫기
+        </button>
+      </p>
     </div>
   </div>
+  <!-- End of Overlay Area -->
 
+  <!-- Grid Area -->
   <div class="case">
     <div class="grid"  id="resizableGrid">
       <div class="item merged">
@@ -122,7 +91,9 @@
       </div>
     </div>
   </div>
+  <!-- End of Grid Area -->
 
+  <!-- Under Bar -->
   <div class="bar under">
     <button onclick="logEditorValue()" id="submit">
       제출하기
@@ -134,5 +105,5 @@
       입력된 내용 처리
     </button>
   </div>
-  <script src="{% static 'js/overlay.js' %}"></script>
+  <!-- End of Under Bar -->
 </body>
