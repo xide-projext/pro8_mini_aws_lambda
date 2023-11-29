@@ -22,28 +22,28 @@ def receive_message_from_sqs(sqs, queue_url):
 
     # 받은 메시지가 있는지 확인
     if 'Messages' in response:
-        message = response['Messages'][0]
-        receipt_handle = message['ReceiptHandle']
+        try:
+            message = response['Messages'][0]
+            receipt_handle = message['ReceiptHandle']
 
-        #print(message['Body'])
+            iden = message['MessageAttributes']['client_id']['StringValue']
+            body = json.loads(message['Body'])
+            code = body['CODE']
+            args = json.loads(body['ARGS'])
+            # #이후 코드의 언어에 따라 Image 변경, 현재는 Python Image
+            image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
 
-        # m = message['Body'].replace("\n","")
-
-        # jo = json.loads(m)
-        iden = message['MessageAttributes']['client_id']['StringValue']
-        code = message['Body']
-
-        # #이후 코드의 언어에 따라 Image 변경, 현재는 Python Image
-        image = "031717690025.dkr.ecr.ap-northeast-2.amazonaws.com/python:latest"
-
-        thread = threading.Thread(target=run_k8s, args=(iden, code, image,))
-        thread.start()
-
-        # 메시지 삭제
-        sqs.delete_message(
-            QueueUrl=queue_url,
-            ReceiptHandle=receipt_handle
-        )
+            thread = threading.Thread(target=run_k8s, args=(iden, code, image, args))
+            thread.start()
+        except Exception as e:
+            print("error : ", e)
+            pass
+        finally:
+            # 메시지 삭제
+            sqs.delete_message(
+                QueueUrl=queue_url,
+                ReceiptHandle=receipt_handle
+            )
 
 if __name__ == "__main__":
     # AWS SQS 클라이언트 생성
