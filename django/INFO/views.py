@@ -20,6 +20,8 @@ def login(request):
 def list(request):
     return render(request, 'list/list.html')
 
+def list2(request):
+    return render(request, 'list/list2.html')
 
 @csrf_protect
 def Insert_into_table(request):
@@ -35,8 +37,7 @@ def Insert_into_table(request):
         # 파라미터화된 쿼리 사용
         sql = "INSERT INTO User_table (Nickname, ID, Password) VALUES (%s, %s, password(%s))"
         params = (nickname, user_id, passwd)
-        #settings 에서 값을 가져오도록 설정함
-        #settings 설정 필수!!
+
         database_settings = settings.DATABASES
         mysql_settings = database_settings['default']
         NAME = mysql_settings['NAME']
@@ -58,4 +59,41 @@ def Insert_into_table(request):
             return JsonResponse({'error': 'Failed to insert data'}, status=500)
     
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_protect
+def login_view(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('ID')
+        password = request.POST.get('Password')
+
+        # RDS에 직접 연결
+        database_settings = settings.DATABASES
+        mysql_settings = database_settings['default']
+        NAME = mysql_settings['NAME']
+        USER = mysql_settings['USER']
+        PASSWORD = mysql_settings['PASSWORD']
+        HOST = mysql_settings['HOST']
+
+        conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=NAME, charset='utf8')
+        cursor = conn.cursor()
+
+        try:
+            # 사용자 정보 대조 쿼리
+            sql = f"SELECT * FROM User_table WHERE ID = '{user_id}' AND Password = password('{password}')"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+
+            if result:
+                # 사용자가 존재하면 로그인
+                return redirect('list2')
+                #return JsonResponse({'redirect_url': 'list/'})
+            else:
+                return JsonResponse({'error': '사용자명 또는 비밀번호가 잘못되었습니다.'}, status=400)
+        except Exception as e:
+            logger.error(f"Error connecting to RDS: {str(e)}")
+            return JsonResponse({'error': '서버 오류가 발생했습니다.'}, status=500)
+        finally:
+            conn.close()
+
+    return render(request, 'login.html')
 
