@@ -5,12 +5,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   
   <script src="{% static 'lib/min/vs/loader.js' %}"></script>
+  <script src="{% static 'js/overlay.js' %}"></script>
   <script>
-  const webSocket = new WebSocket("ws://www.choehanbeen.xyz:8000");
+    window.onload = setInit;
+    const webSocket = new WebSocket("ws://www.choehanbeen.xyz:8000");
 
     require.config({
       paths: {
-        //'vs': 'lib/min/vs'
         'vs' : "{% static 'lib/min/vs' %}"
       }
     });
@@ -23,85 +24,63 @@
         minimap: { enabled: false },
       });
       window.logEditorValue = function() {
-          //console.log(editor.getValue());
-          webSocket.send(editor.getValue());
+        var code = editor.getValue();
+        var args = getValues();
+        var json_data = {
+          CODE : code,
+          ARGS : args
+        };
+        var jsonString = JSON.stringify(json_data, null, 2);
+        webSocket.send(jsonString);
       };
     });
     webSocket.onmessage = function(event) {
       const receivedMessage = event.data;
-      console.log('서버로부터의 메시지:', receivedMessage);
       const rt = document.getElementById('return');
       rt.innerHTML += receivedMessage;
-      // 받은 메시지를 콘솔에 출력하거나 필요한 처리를 수행할 수 있습니다.
     };
   </script>
 </head>
 <body>
-  <div class="bar" id="TopBar">
 
+  <!-- Top Bar -->
+  <div class="bar" id="TopBar">
   </div>
+  <!-- End of Top Bar -->
+
+  <!-- Middle Bar -->
   <div class="bar" id="MiddleBar">
-    
   </div>
+  <!-- End of Middle Bar -->
+
+
+  <!-- Overlay Area -->
+  <div id="overlay" class="overlay">
+    <div class="overlay-content">
+      <div id="table-container">
+        <table id="myTable">
+          <thead>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <button onclick="addRow()">행 추가</button>
+        <button onclick="getValues()">입력된 내용 처리</button>
+        <button class="close-btn" onclick="closeOverlay()">
+          닫기
+        </button>
+      </p>
+    </div>
+  </div>
+  <!-- End of Overlay Area -->
+
+  <!-- Grid Area -->
   <div class="case">
     <div class="grid"  id="resizableGrid">
       <div class="item merged">
         <p class="text">
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
-          아에이오우<br>
           아에이오우<br>
         </p>
       </div>
@@ -112,10 +91,19 @@
       </div>
     </div>
   </div>
+  <!-- End of Grid Area -->
 
+  <!-- Under Bar -->
   <div class="bar under">
     <button onclick="logEditorValue()" id="submit">
       제출하기
     </button>
+    <button onclick="openOverlay()">
+      오버레이 열기
+    </button>
+    <button onclick="processInput()">
+      입력된 내용 처리
+    </button>
   </div>
+  <!-- End of Under Bar -->
 </body>
