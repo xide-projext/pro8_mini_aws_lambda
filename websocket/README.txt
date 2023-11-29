@@ -9,7 +9,5 @@ Require :
     export OUT_QUEUE = K8s가 실행 결과를 전송할 SQS
 
 How to Use :
-    '''
     python websocketserver.py
     or python3 websocketserver.py
-    '''
