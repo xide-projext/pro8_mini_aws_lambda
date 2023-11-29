@@ -5,7 +5,7 @@
 {% endcompress %}
 <HTML>
   <head>
-    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   </head>
   <body>
 
@@ -16,7 +16,9 @@
         </div>
         <div class="login__forms">
   <!--         login form -->
+
           <form action="" class="login__register" id="login-in">
+            {% csrf_token %}
             <h1 class="login__title">Sign In</h1>
             <div class="login__box">
               <i class='bx bx-user login__icon'></i>
@@ -27,52 +29,103 @@
               <input type="text" placeholder="Password" class="login__input">
             </div>
             <a href="#" class="login__forgot">Forgot Password? </a>
-            
-            <a href="#" class="login__button">Sign In</a>
+          
+            <a href="#" class="login__button log_in">Sign In</a>
             
             <div>
               <span class="login__account login__account--account">Don't Have an Account?</span>
               <span class="login__signin login__signin--signup" id="sign-up">Sign Up</span>
             </div>
           </form>
-          
-  <!--         create account form -->
-          <form action="" class="login__create none" id="login-up">
+
+  <!--뭔가있던자리-->
+
+          <form action="{% url 'Insert_into_table' %}" class="login__create none" id="login-up" method="POST">
+            {% csrf_token %}
             <h1 class="login__title">Create Account</h1>
             <div class="login__box">
               <i class='bx bx-user login__icon'></i>
-              <input type="text" placeholder="Nickname" class="login__input">
+              <input type="text" placeholder="Nickname" name="Nickname" class="login__input" required>
             </div>
             
             <div class="login__box">
               <i class='bx bx-at login__icon'></i>
-              <input type="text" placeholder="ID" class="login__input">
+              <input type="text" placeholder="ID" name="ID" class="login__input" required>
             </div>
             
             <div class="login__box">
               <i class='bx bx-lock login__icon'></i>
-              <input type="text" placeholder="Password" class="login__input">
+              <input type="text" placeholder="Password" name="Password" class="login__input" required>
             </div>
             
-            <a href="#" class="login__button">Sign Up</a>
-            
+            <a href="#" class="login__button sign_up">Sign Up</a>
             <div>
               <span class="login__account login__account--account">Already have an Account?</span>
               <span class="login__signup login__signup--signup" id="sign-in">Sign In</span>
             </div>
             
-            <div class="login__social">
+            {% comment %} <div class="login__social">
                <a href="#" class="login__social--icon"><i class='bx bxl-facebook'></i></a>
                <a href="#" class="login__social--icon"><i class='bx bxl-twitter'></i></a>
                <a href="#" class="login__social--icon"><i class='bx bxl-google'></i></a>
                <a href="#" class="login__social--icon"><i class='bx bxl-github'></i></a>
-            </div>
+            </div> {% endcomment %}
           </form>
         </div>
       </div>
      </div>
   </body>
   
+  <script>
+    $(document).ready(function () {
+        // "Sign In" 및 "Sign Up" 버튼 클릭 시 폼 제출
+        $(".sign_up").click(function () {
+            submitForm();
+        });
+
+        function submitForm() {
+            // 폼 데이터 가져오기
+            var formData = $(".login__create").serialize();
+
+            // AJAX 요청으로 폼 제출
+            $.ajax({
+                type: "POST",
+                url: $(".login__create").attr("action"),
+                data: formData,
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                success: function (response) {
+                    // 성공 처리
+                    console.log(response);
+                },
+                error: function (error) {
+                    // 오류 처리
+                    console.error(error);
+                }
+            });
+        }
+
+        // CSRF 토큰을 쿠키에서 가져오는 함수
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // 쿠키 이름으로 시작하는 경우
+                    if (cookie.substring(0, name.length + 1) === name + "=") {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
   <script src="{% static 'js/login.js' %}"></script>
+
    
 </HTML>

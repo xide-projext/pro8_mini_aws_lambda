@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ  #추가
+import pymysql  #추가
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'compressor',
     'channels',
     'django.contrib.admin',
@@ -52,6 +55,7 @@ CHANNEL_LAYERS = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'lamda_PJ.urls'
@@ -85,11 +90,50 @@ WSGI_APPLICATION = 'lamda_PJ.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+pymysql.install_as_MySQLdb()    #추가 
+
+env = environ.Env()   #추가
+# 추가 여기서부터 --------------
+# ~/bashrc 에 환경변수 추가 후에 밑에 DB 동작함
+# export DB_NAME=User_Quiz
+# export DB_USER=admin
+# export DB_PASSWORD=didwn123
+# export DB_HOST=mini-lambda.cdeb8y0dqokw.ap-northeast-2.rds.amazonaws.com
+# export DB_PORT=3306
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
+}
+# 여기까지 추가--------------
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+# settings.py
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
 }
 
 
@@ -146,3 +190,25 @@ COMPRESS_PARSER = 'compressor.parser.HtmlParser'
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
+
+# settings.py
+
+CORS_ALLOWED_ORIGINS = [
+    "http://www.choehanbeen.xyz",
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'X-CSRFToken',
+    'Content-Type',
+]
+
+CSRF_TRUSTED_ORIGINS = ["http://www.choehanbeen.xyz"]
