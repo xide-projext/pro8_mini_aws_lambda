@@ -28,7 +28,7 @@ function getValues() {
         var text = "["  + values.join(", ") + "]"
         args.push(text)
     }
-    arrayText = "\"[" + args.join(", ") + "]\"";
+    arrayText = "[" + args.join(", ") + "]";
     return arrayText;
 }
 
