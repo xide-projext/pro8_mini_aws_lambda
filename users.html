@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Table</title>
+</head>
+<body>
+    <h1>User Table Information</h1>
+    <table border="1">
+        <tr>
+            <th>User_Number</th>
+            <th>Nickname</th>
+            <th>ID</th>
+            <th>Password</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user['User_Number'] }}</td>
+            <td>{{ user['Nickname'] }}</td>
+            <td>{{ user['ID'] }}</td>
+            <td>{{ user['Password'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

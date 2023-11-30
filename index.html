@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Pagination Example</title>
+  <style>
+    .pagination {
+      display: flex;
+      list-style: none;
+      padding: 0;
+    }
+
+    .pagination li {
+      margin-right: 5px;
+    }
+
+    .content {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="content" id="content">
+  <!-- Content will be dynamically populated here -->
+</div>
+
+<ul class="pagination" id="pagination">
+  <!-- Pagination buttons will be dynamically populated here -->
+</ul>
+
+<script>
+  let items = []; // Array to store your content
+  const itemsPerPage = 10;
+  let currentPage = 1;
+
+  function displayContent() {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = Math.min(start + itemsPerPage, items.length);
+    const contentDiv = document.getElementById('content');
+    contentDiv.innerHTML = '';
+
+    for (let i = start; i < end; i++) {
+      const itemDiv = document.createElement('div');
+      itemDiv.textContent = items[i];
+      contentDiv.appendChild(itemDiv);
+    }
+  }
+
+  function generatePagination() {
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const paginationDiv = document.getElementById('pagination');
+    paginationDiv.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.textContent = i;
+
+      button.addEventListener('click', function () {
+        currentPage = i;
+        displayContent();
+        generatePagination();
+      });
+
+      li.appendChild(button);
+      paginationDiv.appendChild(li);
+    }
+  }
+
+  function updateItems(newItems) {
+    items = newItems;
+    currentPage = 1;
+    displayContent();
+    generatePagination();
+  }
+
+  // Flask에서 받은 데이터를 updateItems에 전달
+  updateItems([
+    {% for item in items %}
+      "{{ item }}",
+    {% endfor %}
+  ]);
+</script>
+
+</body>
+</html>
