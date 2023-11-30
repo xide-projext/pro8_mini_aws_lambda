@@ -94,13 +94,6 @@ pymysql.install_as_MySQLdb()    #추가
 
 env = environ.Env()   #추가
 # 추가 여기서부터 --------------
-# ~/bashrc 에 환경변수 추가 후에 밑에 DB 동작함
-# export DB_NAME=User_Quiz
-# export DB_USER=admin
-# export DB_PASSWORD=didwn123
-# export DB_HOST=mini-lambda.cdeb8y0dqokw.ap-northeast-2.rds.amazonaws.com
-# export DB_PORT=3306
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -112,15 +105,6 @@ DATABASES = {
     }
 }
 # 여기까지 추가--------------
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# settings.py
 
 LOGGING = {
     'version': 1,
@@ -211,4 +195,6 @@ CORS_ALLOW_HEADERS = [
     'Content-Type',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://www.choehanbeen.xyz"]
+CSRF_TRUSTED_ORIGINS = ["https://lambdathunder.xyz", "https://xn--2j1b9ht5iqrp.xyz"]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
