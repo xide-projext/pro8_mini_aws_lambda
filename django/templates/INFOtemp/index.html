@@ -8,13 +8,20 @@
   <script src="{% static 'js/overlay.js' %}?version=1"></script>
   <script>
     window.onload = setInit;
-    const webSocket = new WebSocket("ws://www.choehanbeen.xyz:8000");
+
+    const currentProtocol = window.location.protocol;
+
+    // 적절한 프로토콜에 따라 웹소켓 주소 설정
+    const webSocketProtocol = (currentProtocol === 'https:') ? 'wss://lambdathunder.xyz/socket.io' : 'ws://lambdathunder.xyz:8000';
+
+    const webSocket = new WebSocket(webSocketProtocol);
 
     require.config({
       paths: {
         'vs' : "{% static 'lib/min/vs' %}"
       }
     });
+
     require(["vs/editor/editor.main"], () => {
       var editor = monaco.editor.create(document.getElementById('container'), {
         value: `def main():\n\tprint('Hello! World!')\n\treturn 'Bye Bye'`,
