@@ -44,7 +44,7 @@
     webSocket.onmessage = function(event) {
       const receivedMessage = event.data;
       const rt = document.getElementById('return');
-      rt.innerHTML += receivedMessage;
+      rt.innerHTML = show_json(receivedMessage);
     };
   </script>
 </head>

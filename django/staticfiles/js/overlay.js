@@ -10,7 +10,6 @@ function closeOverlay() {
     document.querySelector('.close-btn').style.display = 'none';
 }
 
-
 // 입력된 내용 처리
 function getValues() {
     var table = document.getElementById("myTable");
@@ -114,4 +113,30 @@ function addRow() {
 function deleteRow(btn) {
     var row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
+}
+
+
+function show_json(receivedMessage) {
+    var count = 0;
+    var suc = 0;
+    var tmp = "<ul id='result_list'>\n";
+    var json_text = JSON.parse(receivedMessage);
+    for (var key in json_text) {
+        if (json_text.hasOwnProperty(key)) {
+            count += 1
+            var answer_case = json_text[key];
+            var text = "<li id='result_item'>";
+            if (answer_case['Print'] != "")
+                text += "<p>출력 결과 : \n" + answer_case['Print'] + "</p>\n";
+            
+            var id = (answer_case['Win']) ? "true" : "false";   
+            suc += (answer_case['Win']) ? 1 : 0;   
+            text += "<p id='" + id + "'>결과값 : \n" + answer_case['Return'] + "</p>\n";
+            text += "<p id='" + id + "'>기댓값 : \n" + answer_case['Solution'] + "</p>\n</li>\n";
+        }
+        tmp += text
+    }
+    text = "<p id='headliner'>" + count + "문제 중 " + suc + "문제 정답!</p>\n" + tmp
+    console.log(receivedMessage)
+    return text
 }
