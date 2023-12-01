@@ -195,6 +195,6 @@ CORS_ALLOW_HEADERS = [
     'Content-Type',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://lambdathunder.xyz", "https://xn--2j1b9ht5iqrp.xyz"]
+CSRF_TRUSTED_ORIGINS = ["https://lambdathunder.xyz", "https://xn--2j1b9ht5iqrp.xyz", "https://www.lambdathunder.xyz", "https://www.xn--2j1b9ht5iqrp.xyz"]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

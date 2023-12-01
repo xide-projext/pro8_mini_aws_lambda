@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/list2.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/list2.css' %}">	
 </head>
 <body>
 
@@ -17,11 +17,11 @@
 	</div>
 
 	<h1>람다썬더_lambdathunder</h1>
-	<a href="{% url 'logout' %}">로그아웃</a>
-	<a href="{% url 'index' %}">코드작성페이지</a>
+	<h2><a href="{% url 'logout' %}">로그아웃</a></h2>
+	<h2><a href="{% url 'index' %}">코드작성페이지</a></h2>
 
 	<ul>
-		<li>코드1 </li>
+		<li><a href="{% url 'index' %}">코드1</a></li>
 		<li>코드2</li>
 		<li>코드3</li>
 		<li>코드4</li>
