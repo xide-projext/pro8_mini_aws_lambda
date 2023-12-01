@@ -1,0 +1,11 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ iden }}"
+spec:
+  completions: {{ num_pods }}
+  parallelism: {{ num_pods }}
+  template:
+    spec:
+      restartPolicy: Never
+      containers:

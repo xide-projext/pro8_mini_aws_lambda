@@ -1,1 +1,1 @@
-/k8s/makejob/__pycache__/
+/k8s/**/*.pyc
