@@ -6,6 +6,8 @@
   
   <script src="{% static 'lib/min/vs/loader.js' %}"></script>
   <script>
+    window.onload = setInit;
+    
     const currentProtocol = window.location.protocol;
 
     // 적절한 프로토콜에 따라 웹소켓 주소 설정
@@ -19,6 +21,7 @@
         'vs' : "{% static 'lib/min/vs' %}"
       }
     });
+
     require(["vs/editor/editor.main"], () => {
       var editor = monaco.editor.create(document.getElementById('container'), {
         value: `def main():\n\tprint('Hello! World!')\n\treturn 'Bye Bye'`,
