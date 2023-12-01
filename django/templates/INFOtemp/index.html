@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}?version=1">
   
-  <script src="{% static 'lib/min/vs/loader.js' %}"></script>
+  <script src="{% static 'lib/min/vs/loader.js' %}?version=1"></script>
+  <script src="{% static 'js/overlay.js' %}?version=1"></script>
   <script>
     window.onload = setInit;
 
@@ -23,7 +24,7 @@
 
     require(["vs/editor/editor.main"], () => {
       var editor = monaco.editor.create(document.getElementById('container'), {
-        value: `def main():\n\tprint('Hello! World!')\n\treturn 'Bye Bye'`,
+        value: `def main(a):\n\tprint(a*5)\n\treturn a*2`,
         language: 'python',
         theme: 'vs-dark',
         scrollBeyondLastLine: false,
